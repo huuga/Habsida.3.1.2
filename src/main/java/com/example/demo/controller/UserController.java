@@ -18,14 +18,14 @@ public class UserController {
     @RequestMapping(value = "/")
     public ModelAndView showUsers(Model model) {
         model.addAttribute("usersList", userServiceImp.getUsersList());
-        return new ModelAndView("index.html");
+        return new ModelAndView("index");
     }
 
     @RequestMapping(value = "/add")
     public ModelAndView addUser(Model model) {
         User user = new User();
         model.addAttribute("user", user);
-        return new ModelAndView("add-user.html");
+        return new ModelAndView("add_user");
     }
 
     @RequestMapping("/register")
@@ -39,17 +39,15 @@ public class UserController {
         try {
             User editableUser = userServiceImp.findUserById(Long.parseLong(userId));
             model.addAttribute("editableUser", editableUser);
-            return new ModelAndView("user-edit");
+            return new ModelAndView("user_edit");
         } catch (NumberFormatException nfe) {
             return new ModelAndView("404");
         }
     }
 
-    @PostMapping("/edit/{id}")
-    public ModelAndView saveEditedUser(@ModelAttribute("editableUser") User editedUser,
-                                 @PathVariable("id") String userId) {
+    @PostMapping("/edit")
+    public ModelAndView saveEditedUser(@ModelAttribute("editableUser") User editedUser) {
         try {
-            editedUser.setId(Long.parseLong(userId));
             userServiceImp.updateUser(editedUser);
             return new ModelAndView("redirect:/");
         } catch (NumberFormatException nfe) {
